@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
@@ -24,9 +25,9 @@ public class Movie {
     @Column(name = "movieduration")
     private int movieDuration;
     @Column(name = "endtime")
-    private LocalDate endTime;
+    private LocalDateTime endTime;
     @Column(name = "premieredate")
-    private LocalDate premiereDate;
+    private LocalDateTime premiereDate;
     private String description;
     private String director;
     private String image;

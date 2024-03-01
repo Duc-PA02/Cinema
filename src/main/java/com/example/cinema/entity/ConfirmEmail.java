@@ -2,18 +2,18 @@ package com.example.cinema.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+
 @Entity
 @Table(name = "confirmemail")
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class ConfirmEmail {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,9 +23,9 @@ public class ConfirmEmail {
     @JsonIgnore
     private User userId;
     @Column(name = "requiredtime")
-    private LocalDate requiredTime;
+    private LocalDateTime requiredTime;
     @Column(name = "expiredtime")
-    private LocalDate expiredTime;
+    private LocalDateTime expiredTime;
     @Column(name = "comfirmcode")
     private String confirmCode;
     @Column(name = "iscomfirm")

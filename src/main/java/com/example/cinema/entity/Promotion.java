@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Set;
 
 @Entity
@@ -25,9 +26,9 @@ public class Promotion {
     private int quantity;
     private String type;
     @Column(name = "starttime")
-    private LocalDate startTime;
+    private LocalDateTime startTime;
     @Column(name = "endtime")
-    private LocalDate endTime;
+    private LocalDateTime endTime;
     private String description;
     private String name;
     @Column(name = "isactive")

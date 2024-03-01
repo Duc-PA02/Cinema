@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Set;
 
 @Entity
@@ -23,9 +24,9 @@ public class Schedule {
     private int id;
     private double price;
     @Column(name = "startat")
-    private LocalDate startAt;
+    private LocalDateTime startAt;
     @Column(name = "endat")
-    private LocalDate endAt;
+    private LocalDateTime endAt;
     private String code;
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "movieid",foreignKey = @ForeignKey(name = "fk_schedule_movie"))

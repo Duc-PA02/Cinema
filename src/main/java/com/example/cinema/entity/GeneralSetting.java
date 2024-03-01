@@ -7,6 +7,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+
 @Entity
 @Table(name = "generalsetting")
 @Getter
@@ -18,11 +20,11 @@ public class GeneralSetting {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     @Column(name = "breaktime")
-    private LocalDate breakTime;
+    private LocalDateTime breakTime;
     @Column(name = "businesshours")
     private int businessHours;
     @Column(name = "closetime")
-    private LocalDate closeTime;
+    private LocalDateTime closeTime;
     @Column(name = "fixedticketprice")
     private double fixedTicketPrice;
     @Column(name = "percentday")
@@ -30,5 +32,5 @@ public class GeneralSetting {
     @Column(name = "percentweekend")
     private int percentWeekend;
     @Column(name = "timebegintochange")
-    private LocalDate timeBeginToChange;
+    private LocalDateTime timeBeginToChange;
 }

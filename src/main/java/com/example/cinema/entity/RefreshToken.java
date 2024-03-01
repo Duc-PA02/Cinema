@@ -8,6 +8,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+
 @Entity
 @Table(name = "refreshtoken")
 @Getter
@@ -18,9 +20,9 @@ public class RefreshToken {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    private int token;
+    private String token;
     @Column(name = "expiredtime")
-    private LocalDate expireTime;
+    private LocalDateTime expireTime;
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "userid",foreignKey = @ForeignKey(name = "fk_refreshtoken_user"))
     @JsonIgnore

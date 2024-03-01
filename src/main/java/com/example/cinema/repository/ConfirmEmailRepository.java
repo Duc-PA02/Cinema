@@ -6,4 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ConfirmEmailRepository extends JpaRepository<ConfirmEmail, Integer> {
+    ConfirmEmail findConfirmEmailByConfirmCode(String confirmCode);
 }
