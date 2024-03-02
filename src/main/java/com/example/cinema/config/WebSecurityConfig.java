@@ -18,7 +18,7 @@ public class WebSecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(reques ->{
                     reques
-                            .requestMatchers("user/register", "user/confirm-register","user/login")
+                            .requestMatchers("user/register", "user/confirm-register","user/login","user/change-password","user/forgot-password","user/confirm-new-password")
                             .permitAll();
                 })
         ;

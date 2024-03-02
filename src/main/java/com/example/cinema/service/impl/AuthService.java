@@ -1,9 +1,7 @@
 package com.example.cinema.service.impl;
 
 import com.example.cinema.component.JwtTokenUtils;
-import com.example.cinema.dto.LoginDTO;
-import com.example.cinema.dto.LoginRequest;
-import com.example.cinema.dto.RegisterRequest;
+import com.example.cinema.dto.*;
 import com.example.cinema.entity.RefreshToken;
 import com.example.cinema.entity.Role;
 import com.example.cinema.entity.User;
@@ -18,6 +16,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -44,6 +43,8 @@ public class AuthService implements IAuthService {
     private JwtTokenUtils jwtTokenUtils;
     @Autowired
     private RefreshTokenService refreshTokenService;
+    @Autowired
+    private ConfirmEmailService confirmEmailService;
     public void saveUser(RegisterRequest registerRequest){
         Role userRole = roleRepository.findById(2).orElseThrow(()
                 -> new IllegalStateException("Role not found user"));
@@ -100,5 +101,37 @@ public class AuthService implements IAuthService {
                 .roles(roles)
                 .build();
         return loginDTO;
+    }
+
+    @Override
+    public String changePassword(ChangePasswordRequest changePasswordRequest) throws Exception {
+        User user = userRepository.findById(changePasswordRequest.getId()).orElse(null);
+        if(user == null ){
+            throw new DataNotFoundException("Người dùng không tồn tại");
+        }
+        if(changePasswordRequest.getOldPassword().equals(changePasswordRequest.getNewPassword())){
+            return "Mật khẩu mới và mật khẩu cũ không được trùng nhau";
+        }
+        BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
+        if(!bCryptPasswordEncoder.matches(changePasswordRequest.getOldPassword(), user.getPassword())){
+            return "Mật khẩu cũ không chính xác";
+        }
+        if(!changePasswordRequest.getConfirmPassword().equals(changePasswordRequest.getNewPassword())){
+            return "Xác nhận mật khẩu không trùng khớp";
+        }
+        user.setPassword(bCryptPasswordEncoder.encode(changePasswordRequest.getNewPassword()));
+        userRepository.save(user);
+        return "Đổi mật khẩu thành công";
+    }
+
+    @Override
+    public String forgotPassword(ForgotPasswordRequest forgotPasswordRequest) throws Exception {
+        User user = userRepository.findByEmail(forgotPasswordRequest.getEmail()).orElse(null);
+        if(user == null){
+            throw new DataNotFoundException("Email không tồn tại");
+        }
+
+        confirmEmailService.sendConfirmEmail(forgotPasswordRequest.getEmail());
+        return "Mã xác nhận đã được gửi vui lòng kiểm tra email";
     }
 }
