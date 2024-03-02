@@ -12,7 +12,6 @@ import java.util.List;
 public class LoginDTO {
     private int id;
     private String userName;
-    private String email;
     private String token;
     private String refreshToken;
     private List<String> roles;
