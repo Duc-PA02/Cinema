@@ -14,11 +14,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
@@ -47,7 +50,7 @@ public class AuthController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
     }
-    @PutMapping("user/change-password")
+    @PostMapping("user/change-password")
     public ResponseEntity<?> changePassword(@RequestBody ChangePasswordRequest changePasswordRequest){
         try {
             String msg = authService.changePassword(changePasswordRequest);
@@ -58,6 +61,21 @@ public class AuthController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
     }
+//    @PostMapping("user/change-password")
+//    public ResponseEntity<String> changePassword(@RequestBody ChangePasswordRequest request) {
+//        try {
+//            UserCustomDetail nguoiDung = (UserCustomDetail) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+//            if (userRepository.findById(nguoiDung.getUser().getId()).isPresent()) {
+//                System.out.println("Nguoi dung la: " + nguoiDung.getUser().getUserName());
+//                var result = authService.changePassword(nguoiDung.getUser().getId(), request);
+//            } else {
+//                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Không tìm thấy thông tin người dùng.");
+//            }
+//        } catch (Exception e) {
+//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+//        }
+//        return ResponseEntity.ok("Đổi mật khẩu thành công");
+//    }
     @PostMapping("user/forgot-password")
     public ResponseEntity<?> forgotPassword(@RequestBody ForgotPasswordRequest forgotPasswordRequest){
         try {
@@ -75,7 +93,14 @@ public class AuthController {
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         try {
             ConfirmEmail confirmEmail = confirmEmailRepository.findConfirmEmailByConfirmCode(confirmNewPasswordRequest.getConfirmCode());
-            User user = userRepository.findByUserConfirmEmails(confirmEmail);
+            if (confirmEmail == null) {
+                throw new DataNotFoundException("Không tìm thấy email xác nhận cho mã: " + confirmNewPasswordRequest.getConfirmCode());
+            }
+            Optional<User> userOptional = userRepository.findByEmail(confirmNewPasswordRequest.getEmail());
+            if (userOptional == null) {
+                throw new DataNotFoundException("Không tìm thấy người dùng cho email: " + confirmNewPasswordRequest.getEmail());
+            }
+            User user = userOptional.get();
             var isConfirm = confirmEmailService.confirmEmail(confirmNewPasswordRequest.getConfirmCode());
             if(isConfirm){
                 user.setPassword(passwordEncoder.encode(confirmNewPasswordRequest.getNewPassword()));

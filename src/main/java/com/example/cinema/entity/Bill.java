@@ -2,6 +2,7 @@ package com.example.cinema.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -30,7 +31,7 @@ public class Bill {
     private LocalDateTime creatTime;
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "customerid",foreignKey = @ForeignKey(name = "fk_bill_user"))
-    @JsonIgnore
+    @JsonManagedReference
     private User customerId;
     private String name;
     @Column(name = "updatetime")

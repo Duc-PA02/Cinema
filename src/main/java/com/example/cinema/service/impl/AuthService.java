@@ -95,7 +95,7 @@ public class AuthService implements IAuthService {
 
         LoginDTO loginDTO= LoginDTO.builder()
                 .id(existingUser.getId())
-                .userName(existingUser.getName())
+                .userName(existingUser.getUserName())
                 .token(token)
                 .refreshToken(refreshTokens.getToken())
                 .roles(roles)
@@ -103,9 +103,27 @@ public class AuthService implements IAuthService {
         return loginDTO;
     }
 
+//    @Override
+//    public String changePassword(int userId, ChangePasswordRequest changePasswordRequest) throws Exception {
+//        User user = userRepository.findById(userId).orElse(null);
+//        if (user == null){
+//            return "Người dùng có id " + userId + " không ồn tại trên hệ thống";
+//        }
+//        BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
+//        if (!bCryptPasswordEncoder.matches(changePasswordRequest.getOldPassword(), user.getPassword())) {
+//            return "Mật khẩu cũ không chính xác";
+//        }
+//        if (!changePasswordRequest.getNewPassword().equals(changePasswordRequest.getConfirmPassword())) {
+//            return "Xác nhận mật khẩu không trùng khớp";
+//        }
+//        user.setPassword(bCryptPasswordEncoder.encode(changePasswordRequest.getNewPassword()));
+//        userRepository.save(user);
+//        return "Đổi mật khẩu thành công";
+//    }
+
     @Override
     public String changePassword(ChangePasswordRequest changePasswordRequest) throws Exception {
-        User user = userRepository.findById(changePasswordRequest.getId()).orElse(null);
+        User user = userRepository.findByEmail(changePasswordRequest.getEmail()).orElse(null);
         if(user == null ){
             throw new DataNotFoundException("Người dùng không tồn tại");
         }

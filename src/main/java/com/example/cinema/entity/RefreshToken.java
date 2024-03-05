@@ -1,6 +1,7 @@
 package com.example.cinema.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 import org.modelmapper.spi.Tokens;
@@ -24,6 +25,6 @@ public class RefreshToken {
     private LocalDateTime expiredTime;
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "userid",foreignKey = @ForeignKey(name = "fk_refreshtoken_user"))
-    @JsonIgnore
+    @JsonManagedReference
     private User userId;
 }

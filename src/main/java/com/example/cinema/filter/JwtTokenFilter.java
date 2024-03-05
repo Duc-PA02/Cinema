@@ -1,5 +1,7 @@
-package com.example.cinema.component;
+package com.example.cinema.filter;
 
+import com.example.cinema.component.JwtTokenUtils;
+import com.example.cinema.entity.User;
 import jakarta.annotation.Nonnull;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -9,7 +11,6 @@ import lombok.RequiredArgsConstructor;
 import org.modelmapper.internal.Pair;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;

@@ -7,6 +7,7 @@ import com.example.cinema.dto.LoginRequest;
 
 public interface IAuthService {
     LoginDTO login(LoginRequest loginRequest) throws Exception;
+//    String changePassword(int userId, ChangePasswordRequest changePasswordRequest) throws Exception;
     String changePassword(ChangePasswordRequest changePasswordRequest) throws Exception;
 
     String forgotPassword(ForgotPasswordRequest forgotPasswordRequest)throws Exception;
