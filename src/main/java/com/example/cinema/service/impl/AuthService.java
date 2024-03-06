@@ -21,6 +21,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -103,44 +104,47 @@ public class AuthService implements IAuthService {
         return loginDTO;
     }
 
+    @Override
+    public String changePassword(int userId, ChangePasswordRequest changePasswordRequest) throws Exception {
+        Optional<User> user = userRepository.findById(userId);
+        if (user.isEmpty()){
+            return "Người dùng có id " + userId + " không ồn tại trên hệ thống";
+        }
+        BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
+        if (!bCryptPasswordEncoder.matches(changePasswordRequest.getOldPassword(), user.get().getPassword())) {
+            return "Mật khẩu cũ không chính xác";
+        }
+        if (!changePasswordRequest.getNewPassword().equals(changePasswordRequest.getConfirmPassword())) {
+            return "Xác nhận mật khẩu không trùng khớp";
+        }
+        if (changePasswordRequest.getOldPassword().equals(changePasswordRequest.getNewPassword())){
+            return "Mật khẩu cũ và mật khẩu mới không được trùng nhau";
+        }
+        user.get().setPassword(bCryptPasswordEncoder.encode(changePasswordRequest.getNewPassword()));
+        userRepository.save(user.get());
+        return "Đổi mật khẩu thành công";
+    }
+
 //    @Override
-//    public String changePassword(int userId, ChangePasswordRequest changePasswordRequest) throws Exception {
-//        User user = userRepository.findById(userId).orElse(null);
-//        if (user == null){
-//            return "Người dùng có id " + userId + " không ồn tại trên hệ thống";
+//    public String changePassword(ChangePasswordRequest changePasswordRequest) throws Exception {
+//        User user = userRepository.findByEmail(changePasswordRequest.getEmail()).orElse(null);
+//        if(user == null ){
+//            throw new DataNotFoundException("Người dùng không tồn tại");
+//        }
+//        if(changePasswordRequest.getOldPassword().equals(changePasswordRequest.getNewPassword())){
+//            return "Mật khẩu mới và mật khẩu cũ không được trùng nhau";
 //        }
 //        BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
-//        if (!bCryptPasswordEncoder.matches(changePasswordRequest.getOldPassword(), user.getPassword())) {
+//        if(!bCryptPasswordEncoder.matches(changePasswordRequest.getOldPassword(), user.getPassword())){
 //            return "Mật khẩu cũ không chính xác";
 //        }
-//        if (!changePasswordRequest.getNewPassword().equals(changePasswordRequest.getConfirmPassword())) {
+//        if(!changePasswordRequest.getConfirmPassword().equals(changePasswordRequest.getNewPassword())){
 //            return "Xác nhận mật khẩu không trùng khớp";
 //        }
 //        user.setPassword(bCryptPasswordEncoder.encode(changePasswordRequest.getNewPassword()));
 //        userRepository.save(user);
 //        return "Đổi mật khẩu thành công";
 //    }
-
-    @Override
-    public String changePassword(ChangePasswordRequest changePasswordRequest) throws Exception {
-        User user = userRepository.findByEmail(changePasswordRequest.getEmail()).orElse(null);
-        if(user == null ){
-            throw new DataNotFoundException("Người dùng không tồn tại");
-        }
-        if(changePasswordRequest.getOldPassword().equals(changePasswordRequest.getNewPassword())){
-            return "Mật khẩu mới và mật khẩu cũ không được trùng nhau";
-        }
-        BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
-        if(!bCryptPasswordEncoder.matches(changePasswordRequest.getOldPassword(), user.getPassword())){
-            return "Mật khẩu cũ không chính xác";
-        }
-        if(!changePasswordRequest.getConfirmPassword().equals(changePasswordRequest.getNewPassword())){
-            return "Xác nhận mật khẩu không trùng khớp";
-        }
-        user.setPassword(bCryptPasswordEncoder.encode(changePasswordRequest.getNewPassword()));
-        userRepository.save(user);
-        return "Đổi mật khẩu thành công";
-    }
 
     @Override
     public String forgotPassword(ForgotPasswordRequest forgotPasswordRequest) throws Exception {

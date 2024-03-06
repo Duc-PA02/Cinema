@@ -15,6 +15,9 @@ import java.util.List;
 @Builder
 public class UserCustomDetail implements UserDetails {
     private User user;
+    public UserCustomDetail(User user){
+        this.user = user;
+    }
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         List<SimpleGrantedAuthority> authorityList=  new ArrayList<>();

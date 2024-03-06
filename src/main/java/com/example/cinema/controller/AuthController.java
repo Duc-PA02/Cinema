@@ -50,32 +50,32 @@ public class AuthController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
     }
+//    @PostMapping("user/change-password")
+//    public ResponseEntity<?> changePassword(@RequestBody ChangePasswordRequest changePasswordRequest){
+//        try {
+//            String msg = authService.changePassword(changePasswordRequest);
+//            return ResponseEntity.ok().body(msg);
+//        }catch (DataNotFoundException ex){
+//            return ResponseEntity.badRequest().body(ex.getMessage());
+//        }catch (Exception e){
+//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+//        }
+//    }
     @PostMapping("user/change-password")
-    public ResponseEntity<?> changePassword(@RequestBody ChangePasswordRequest changePasswordRequest){
+    public ResponseEntity<String> changePassword(@RequestBody ChangePasswordRequest request) {
         try {
-            String msg = authService.changePassword(changePasswordRequest);
-            return ResponseEntity.ok().body(msg);
-        }catch (DataNotFoundException ex){
-            return ResponseEntity.badRequest().body(ex.getMessage());
-        }catch (Exception e){
+            User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            if (userRepository.findById(user.getId()).isPresent()) {
+                System.out.println("Nguoi dung la: " + user.getUserName());
+                var result = authService.changePassword(user.getId(), request);
+                return ResponseEntity.ok(result);
+            } else {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Không tìm thấy thông tin người dùng.");
+            }
+        } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
     }
-//    @PostMapping("user/change-password")
-//    public ResponseEntity<String> changePassword(@RequestBody ChangePasswordRequest request) {
-//        try {
-//            UserCustomDetail nguoiDung = (UserCustomDetail) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-//            if (userRepository.findById(nguoiDung.getUser().getId()).isPresent()) {
-//                System.out.println("Nguoi dung la: " + nguoiDung.getUser().getUserName());
-//                var result = authService.changePassword(nguoiDung.getUser().getId(), request);
-//            } else {
-//                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Không tìm thấy thông tin người dùng.");
-//            }
-//        } catch (Exception e) {
-//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
-//        }
-//        return ResponseEntity.ok("Đổi mật khẩu thành công");
-//    }
     @PostMapping("user/forgot-password")
     public ResponseEntity<?> forgotPassword(@RequestBody ForgotPasswordRequest forgotPasswordRequest){
         try {
