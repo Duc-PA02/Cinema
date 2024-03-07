@@ -1,11 +1,9 @@
 package com.example.cinema.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.Set;
 
@@ -15,18 +13,19 @@ import java.util.Set;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class Cinema {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    private String adress;
+    private String address;
     private String description;
     private String code;
     @Column(name = "nameofcinema")
     private String nameOfCinema;
     @Column(name = "isactive")
-    private boolean isActive;
-    @OneToMany(mappedBy = "cinemaId")
-    @JsonIgnoreProperties
+    private boolean isActive = true;
+    @OneToMany(mappedBy = "cinema")
+    @JsonBackReference
     private Set<Room> cinemarooms;
 }

@@ -1,7 +1,9 @@
 package com.example.cinema.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -26,16 +28,16 @@ public class Room {
     private String description;
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "cinemaid",foreignKey = @ForeignKey(name = "fk_room_cinema"))
-    @JsonIgnore
-    private Cinema cinemaId;
+    @JsonManagedReference
+    private Cinema cinema;
     private String code;
     private String name;
     @Column(name = "isactive")
-    private boolean isActive;
+    private boolean isActive = true;
     @OneToMany(mappedBy = "roomId")
-    @JsonIgnoreProperties
+    @JsonBackReference
     private List<Schedule> roomschedulelist;
     @OneToMany(mappedBy = "roomId")
-    @JsonIgnoreProperties
+    @JsonBackReference
     private Set<Seat> roomseats;
 }

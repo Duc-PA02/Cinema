@@ -2,6 +2,7 @@ package com.example.cinema.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -28,7 +29,7 @@ public class Seat {
     private String line;
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "roomid",foreignKey = @ForeignKey(name = "fk_seat_room"))
-    @JsonIgnore
+    @JsonManagedReference
     private Room roomId;
     @Column(name = "isactive")
     private boolean isActive;
