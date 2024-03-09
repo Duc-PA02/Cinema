@@ -9,7 +9,7 @@ import lombok.*;
 @Getter
 @Setter
 public class UpdateRoomRequest {
-    private int roomId;
+    private int id;
     private int capacity;
     private int type;
     private String description;

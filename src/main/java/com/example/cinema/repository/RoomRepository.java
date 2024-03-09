@@ -10,6 +10,7 @@ import java.util.Optional;
 
 @Repository
 public interface RoomRepository extends JpaRepository<Room, Integer> {
+    List<Room> findAllByCodeAndIdNot(String code, int id);
     boolean existsByName(String name);
     Room findByCode(String code);
 }

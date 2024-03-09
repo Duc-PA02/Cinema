@@ -48,7 +48,7 @@ public class RoomService implements IRoomService {
 
     @Override
     public Room updateRoom(UpdateRoomRequest updateRoomRequest) throws Exception {
-        Room room = roomRepository.findById(updateRoomRequest.getRoomId()).orElse(null);
+        Room room = roomRepository.findById(updateRoomRequest.getId()).orElse(null);
         Cinema cinema = cinemaRepository.findById(updateRoomRequest.getCinemaId()).orElse(null);
         if (room == null){
             throw new DataNotFoundException("Room khong ton tai");
@@ -56,11 +56,8 @@ public class RoomService implements IRoomService {
         if (cinema == null){
             throw new DataNotFoundException("cinema khong ton tai");
         }
-        List<Room> roomList = roomRepository.findAll();
-        for (Room roomCheck : roomList){
-            if (roomCheck.getCode().compareTo(updateRoomRequest.getCode())==0){
-                throw new DataIntegrityViolationException("code da ton tai");
-            }
+        if(!roomRepository.findAllByCodeAndIdNot(updateRoomRequest.getCode(),room.getId()).isEmpty()){
+            throw new DataIntegrityViolationException("Code da ton tai");
         }
         room.setCinema(cinema);
         room.setCapacity(updateRoomRequest.getCapacity());
