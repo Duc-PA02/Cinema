@@ -32,12 +32,12 @@ public class WebSecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(requests ->
                         requests
-                                .requestMatchers(HttpMethod.POST, "/user/register", "/user/confirm-register", "/user/login", "/user/forgot-password", "/user/confirm-new-password")
+                                .requestMatchers(HttpMethod.POST, "/user/register", "/user/confirm-register", "/user/login", "/user/forgot-password", "/user/confirm-new-password","movie/movie-top")
                                 .permitAll()
                                 .requestMatchers(HttpMethod.GET, "/admin/get/all-user","/admin/get/userbyid").hasRole("ADMIN")
-                                .requestMatchers(HttpMethod.POST,"/admin/cinema/create","/admin/room/create","admin/food/create","admin/seat/create").hasRole("ADMIN")
-                                .requestMatchers(HttpMethod.PUT,"/admin/cinema/update","/admin/room/update","admin/food/update","admin/seat/update").hasRole("ADMIN")
-                                .requestMatchers(HttpMethod.DELETE,"/admin/cinema/delete","/admin/room/delete","admin/food/delete","admin/seat/delete").hasRole("ADMIN")
+                                .requestMatchers(HttpMethod.POST,"/admin/cinema/create","/admin/room/create","admin/food/create","admin/seat/create","admin/movie/create").hasRole("ADMIN")
+                                .requestMatchers(HttpMethod.PUT,"/admin/cinema/update","/admin/room/update","admin/food/update","admin/seat/update","admin/movie/update").hasRole("ADMIN")
+                                .requestMatchers(HttpMethod.DELETE,"/admin/cinema/delete","/admin/room/delete","admin/food/delete","admin/seat/delete","admin/movie/delete").hasRole("ADMIN")
                                 .requestMatchers(HttpMethod.POST, "/user/change-password").hasAnyRole("ADMIN", "USER")
                                 .anyRequest().authenticated()
 

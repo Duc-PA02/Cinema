@@ -33,7 +33,7 @@ public class MovieService implements IMovieService {
     @Autowired
     private ScheduleRepository scheduleRepository;
     public LocalDateTime formatTime(LocalDateTime dateTime) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-mm-dd");
         String formattedDateTime = dateTime.format(formatter);
         return LocalDateTime.parse(formattedDateTime, formatter);
     }

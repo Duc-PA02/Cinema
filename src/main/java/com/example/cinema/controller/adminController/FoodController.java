@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class FoodController {
     private final FoodService foodService;
-    @PostMapping("admin/food/creat")
+    @PostMapping("admin/food/create")
     public ResponseEntity<?> createFood(@RequestBody FoodCreateRequest foodCreateRequest){
         try {
             return ResponseEntity.ok().body(foodService.createFood(foodCreateRequest));

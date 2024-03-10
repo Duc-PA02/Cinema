@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class SeatController {
     private final SeatService seatService;
-    @PostMapping("admin/seat/creat")
+    @PostMapping("admin/seat/create")
     public ResponseEntity<?> createSeat(@RequestBody SeatCreateRequest seatCreateRequest){
         try {
             return ResponseEntity.ok().body(seatService.creatSeat(seatCreateRequest));
