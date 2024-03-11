@@ -1,9 +1,6 @@
 package com.example.cinema.dto;
 
-import jakarta.persistence.Column;
 import lombok.*;
-
-import java.time.LocalDateTime;
 
 @Data
 @Builder
@@ -13,8 +10,8 @@ import java.time.LocalDateTime;
 @Setter
 public class MovieCreateRequest {
     private int movieDuration;
-    private LocalDateTime endTime;
-    private LocalDateTime premiereDate;
+    private String endTime;
+    private String premiereDate;
     private String description;
     private String director;
     private String image;

@@ -10,6 +10,7 @@ import java.util.List;
 
 @Repository
 public interface MovieRepository extends JpaRepository<Movie, Integer> {
+    boolean existsByName(String name);
     @Query(nativeQuery = true,
             value = "SELECT m.id, m.name, COUNT(t.id) AS TicketCount " +
                     "FROM movie m " +

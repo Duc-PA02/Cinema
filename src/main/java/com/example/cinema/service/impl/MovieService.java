@@ -14,9 +14,11 @@ import com.example.cinema.repository.RateRepository;
 import com.example.cinema.repository.ScheduleRepository;
 import com.example.cinema.service.iservice.IMovieService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -32,13 +34,20 @@ public class MovieService implements IMovieService {
     private RateRepository rateRepository;
     @Autowired
     private ScheduleRepository scheduleRepository;
-    public LocalDateTime formatTime(LocalDateTime dateTime) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-mm-dd");
-        String formattedDateTime = dateTime.format(formatter);
-        return LocalDateTime.parse(formattedDateTime, formatter);
+    public LocalDateTime formatTime(String dateTime) {
+        DateTimeFormatter endTimeFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        LocalDate localDate =LocalDate.parse(dateTime,endTimeFormatter);
+        LocalDateTime localDateTimeEndTime = localDate.atStartOfDay();
+        return localDateTimeEndTime;
     }
-    public boolean checkEndTimeAfterPremiereDate(LocalDateTime endTime, LocalDateTime premiereDate){
-        return endTime.isAfter(premiereDate);
+    public boolean checkEndTimeAfterPremiereDate(String endTime, String premiereDate){
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
+        LocalDateTime endTimeDateTime = LocalDateTime.parse(endTime + " 00:00:00", formatter);
+        LocalDateTime premiereDateTime = LocalDateTime.parse(premiereDate + " 00:00:00", formatter);
+        if (endTimeDateTime.isBefore(premiereDateTime)) {
+            return false;
+        }
+        return true;
     }
     @Override
     public Movie createMovie(MovieCreateRequest movieCreateRequest) throws Exception {
@@ -52,6 +61,9 @@ public class MovieService implements IMovieService {
         }
         if (!movieTypeRepository.existsById(movieCreateRequest.getMovieTypeId())){
             throw new DataNotFoundException("movieType khong ton tai");
+        }
+        if (movieRepository.existsByName(movieCreateRequest.getName())){
+            throw new DataIntegrityViolationException("ten phim da ton tai");
         }
         Movie movie = Movie.builder()
                 .movieDuration(movieCreateRequest.getMovieDuration())
@@ -83,6 +95,9 @@ public class MovieService implements IMovieService {
         }
         if (!movieTypeRepository.existsById(movieUpdateRequest.getMovieTypeId())){
             throw new DataNotFoundException("movieType khong ton tai");
+        }
+        if (movieRepository.existsByName(movieUpdateRequest.getName())){
+            throw new DataIntegrityViolationException("ten phim da ton tai");
         }
         Movie newMovie = Movie.builder()
                 .movieDuration(movieUpdateRequest.getMovieDuration())

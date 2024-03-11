@@ -13,8 +13,8 @@ import java.time.LocalDateTime;
 public class MovieUpdateRequest {
     private int id;
     private int movieDuration;
-    private LocalDateTime endTime;
-    private LocalDateTime premiereDate;
+    private String endTime;
+    private String premiereDate;
     private String description;
     private String director;
     private String image;
