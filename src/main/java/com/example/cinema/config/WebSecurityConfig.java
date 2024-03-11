@@ -34,7 +34,7 @@ public class WebSecurityConfig {
                         requests
                                 .requestMatchers(HttpMethod.POST, "/user/register", "/user/confirm-register", "/user/login", "/user/forgot-password", "/user/confirm-new-password")
                                 .permitAll()
-                                .requestMatchers(HttpMethod.GET,"movie/top-movie").permitAll()
+                                .requestMatchers(HttpMethod.GET,"movie/top-movie","movie/cinema-movie").permitAll()
                                 .requestMatchers(HttpMethod.GET, "/admin/get/all-user","/admin/get/userbyid").hasRole("ADMIN")
                                 .requestMatchers(HttpMethod.POST,"/admin/cinema/create","/admin/room/create","admin/food/create","admin/seat/create","admin/movie/create").hasRole("ADMIN")
                                 .requestMatchers(HttpMethod.PUT,"/admin/cinema/update","/admin/room/update","admin/food/update","admin/seat/update","admin/movie/update").hasRole("ADMIN")

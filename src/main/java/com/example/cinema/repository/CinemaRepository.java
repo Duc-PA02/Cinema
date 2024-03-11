@@ -17,4 +17,5 @@ public interface CinemaRepository extends JpaRepository<Cinema, Integer> {
     List<Cinema> findAllByNameOfCinemaAndIdNot(String nameOfCode, int id);
 
     List<Cinema> findAllByCodeAndIdNot(String code, int id);
+    Cinema findByNameOfCinema(String name);
 }

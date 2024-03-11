@@ -1,5 +1,6 @@
 package com.example.cinema.service.iservice;
 
+import com.example.cinema.dto.MovieByCinema;
 import com.example.cinema.dto.MovieByTicketCount;
 import com.example.cinema.dto.MovieCreateRequest;
 import com.example.cinema.dto.MovieUpdateRequest;
@@ -12,4 +13,5 @@ public interface IMovieService {
     Movie updateMovie(MovieUpdateRequest movieUpdateRequest) throws Exception;
     public String deleteMovie(int id);
     List<MovieByTicketCount> getMoviesOrderByTicketCount();
+    List<MovieByCinema> getMoviesByCinema(String nameCinema) throws Exception;
 }

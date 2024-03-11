@@ -1,17 +1,12 @@
 package com.example.cinema.service.impl;
 
+import com.example.cinema.dto.MovieByCinema;
 import com.example.cinema.dto.MovieByTicketCount;
 import com.example.cinema.dto.MovieCreateRequest;
 import com.example.cinema.dto.MovieUpdateRequest;
-import com.example.cinema.entity.Movie;
-import com.example.cinema.entity.MovieType;
-import com.example.cinema.entity.Rate;
-import com.example.cinema.entity.Schedule;
+import com.example.cinema.entity.*;
 import com.example.cinema.exceptions.DataNotFoundException;
-import com.example.cinema.repository.MovieRepository;
-import com.example.cinema.repository.MovieTypeRepository;
-import com.example.cinema.repository.RateRepository;
-import com.example.cinema.repository.ScheduleRepository;
+import com.example.cinema.repository.*;
 import com.example.cinema.service.iservice.IMovieService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -21,6 +16,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -36,6 +32,10 @@ public class MovieService implements IMovieService {
     private RateRepository rateRepository;
     @Autowired
     private ScheduleRepository scheduleRepository;
+    @Autowired
+    private RoomRepository roomRepository;
+    @Autowired
+    private CinemaRepository cinemaRepository;
     public LocalDateTime formatTime(String dateTime) {
         DateTimeFormatter endTimeFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         LocalDate localDate =LocalDate.parse(dateTime,endTimeFormatter);
@@ -139,5 +139,44 @@ public class MovieService implements IMovieService {
     public List<MovieByTicketCount> getMoviesOrderByTicketCount() {
         List<MovieByTicketCount> movieByTicketCountList = movieRepository.findMoviesOrderByTicketCount();
         return movieByTicketCountList;
+    }
+
+    public List<MovieByCinema> getMoviesByCinema(String nameCinema) throws Exception{
+        // Tìm rạp chiếu phim dựa trên tên rạp
+        Cinema cinema = cinemaRepository.findByNameOfCinema(nameCinema);
+        if (cinema == null) {
+            throw new DataNotFoundException("Khong tim thay rap");
+        }
+
+        // Lấy danh sách các phòng chiếu của rạp
+        List<Room> rooms = new ArrayList<>(cinema.getCinemarooms());
+
+        // Tạo danh sách kết quả
+        List<MovieByCinema> result = new ArrayList<>();
+
+        // Duyệt qua danh sách phòng chiếu
+        for (Room room : rooms) {
+            // Lấy danh sách lịch chiếu phim của từng phòng
+            List<Schedule> schedules = scheduleRepository.findByRoomId(room.getId());
+
+            // Duyệt qua danh sách lịch chiếu và thêm thông tin về bộ phim vào kết quả
+            for (Schedule schedule : schedules) {
+                Movie movie = schedule.getMovieId();
+                result.add(MovieByCinema.builder()
+                        .movieDuration(movie.getMovieDuration())
+                        .endTime(movie.getEndTime().toString())
+                        .premiereDate(movie.getPremiereDate().toString())
+                        .description(movie.getDescription())
+                        .director(movie.getDirector())
+                        .image(movie.getImage())
+                        .heroImage(movie.getHeroImage())
+                        .language(movie.getLanguage())
+                        .name(movie.getName())
+                        .trailer(movie.getTrailer())
+                        .build());
+            }
+        }
+
+        return result;
     }
 }
