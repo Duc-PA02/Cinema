@@ -1,9 +1,6 @@
 package com.example.cinema.service.impl;
 
-import com.example.cinema.dto.MovieByCinema;
-import com.example.cinema.dto.MovieByTicketCount;
-import com.example.cinema.dto.MovieCreateRequest;
-import com.example.cinema.dto.MovieUpdateRequest;
+import com.example.cinema.dto.*;
 import com.example.cinema.entity.*;
 import com.example.cinema.exceptions.DataNotFoundException;
 import com.example.cinema.repository.*;
@@ -18,9 +15,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 public class MovieService implements IMovieService {
@@ -101,6 +96,9 @@ public class MovieService implements IMovieService {
         if (movieRepository.existsByName(movieUpdateRequest.getName())){
             throw new DataIntegrityViolationException("ten phim da ton tai");
         }
+        if (!checkEndTimeAfterPremiereDate(movieUpdateRequest.getEndTime(),movieUpdateRequest.getPremiereDate())){
+            throw new InvalidDataAccessApiUsageException("Thoi gian cong chieu phai truoc thoi gian ket thuc");
+        }
         Movie newMovie = Movie.builder()
                 .movieDuration(movieUpdateRequest.getMovieDuration())
                 .endTime(formatTime(movieUpdateRequest.getEndTime()))
@@ -142,24 +140,14 @@ public class MovieService implements IMovieService {
     }
 
     public List<MovieByCinema> getMoviesByCinema(String nameCinema) throws Exception{
-        // Tìm rạp chiếu phim dựa trên tên rạp
         Cinema cinema = cinemaRepository.findByNameOfCinema(nameCinema);
         if (cinema == null) {
             throw new DataNotFoundException("Khong tim thay rap");
         }
-
-        // Lấy danh sách các phòng chiếu của rạp
         List<Room> rooms = new ArrayList<>(cinema.getCinemarooms());
-
-        // Tạo danh sách kết quả
         List<MovieByCinema> result = new ArrayList<>();
-
-        // Duyệt qua danh sách phòng chiếu
         for (Room room : rooms) {
-            // Lấy danh sách lịch chiếu phim của từng phòng
             List<Schedule> schedules = scheduleRepository.findByRoomId(room.getId());
-
-            // Duyệt qua danh sách lịch chiếu và thêm thông tin về bộ phim vào kết quả
             for (Schedule schedule : schedules) {
                 Movie movie = schedule.getMovieId();
                 result.add(MovieByCinema.builder()
@@ -176,7 +164,31 @@ public class MovieService implements IMovieService {
                         .build());
             }
         }
-
         return result;
+    }
+
+    @Override
+    public List<MovieDTO> getMovies() throws Exception {
+        List<Movie> movies = movieRepository.findAll();
+        if (movies == null){
+            throw new DataNotFoundException("Khong tim thay movie");
+        }
+        List<MovieDTO> movieDTOs = new ArrayList<>();
+
+        for (Movie movie : movies) {
+            MovieDTO movieDTO = new MovieDTO();
+            movieDTO.setMovieDuration(movie.getMovieDuration());
+            movieDTO.setPremiereDate(movie.getPremiereDate());
+            movieDTO.setDescription(movie.getDescription());
+            movieDTO.setDirector(movie.getDirector());
+            movieDTO.setImage(movie.getImage());
+            movieDTO.setHeroImage(movie.getHeroImage());
+            movieDTO.setLanguage(movie.getLanguage());
+            movieDTO.setName(movie.getName());
+            movieDTO.setTrailer(movie.getTrailer());
+            movieDTOs.add(movieDTO);
+        }
+
+        return movieDTOs;
     }
 }

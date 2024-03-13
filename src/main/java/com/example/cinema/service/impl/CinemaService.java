@@ -3,7 +3,9 @@ package com.example.cinema.service.impl;
 import com.example.cinema.dto.CinemaDTO;
 import com.example.cinema.dto.UpdateCinemaDTO;
 import com.example.cinema.entity.Cinema;
+import com.example.cinema.entity.Movie;
 import com.example.cinema.entity.Room;
+import com.example.cinema.entity.Schedule;
 import com.example.cinema.exceptions.DataNotFoundException;
 import com.example.cinema.repository.CinemaRepository;
 import com.example.cinema.repository.RoomRepository;
@@ -12,7 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class CinemaService implements ICinemaService {
@@ -115,5 +117,32 @@ public class CinemaService implements ICinemaService {
         }
         cinemaRepository.delete(cinema.get());
         return "Xoa thanh cong cinema";
+    }
+
+    @Override
+    public List<CinemaDTO> getCinemaByMovie() throws Exception {
+        List<Cinema> cinemas = cinemaRepository.findAll();
+        if (cinemas == null){
+            throw new DataNotFoundException("Khong tim thay cinema");
+        }
+        List<CinemaDTO> cinemaDTOs = new ArrayList<>();
+        for (Cinema cinema : cinemas){
+            Set<Movie> movies = new HashSet<>();
+            for (Room room : cinema.getCinemarooms()){
+                for (Schedule schedule : room.getRoomschedulelist()){
+                    movies.add(schedule.getMovieId());
+                }
+            }
+            if (!movies.isEmpty()){
+                CinemaDTO cinemaDTO = CinemaDTO.builder()
+                        .address(cinema.getAddress())
+                        .description(cinema.getDescription())
+                        .code(cinema.getCode())
+                        .nameOfCinema(cinema.getNameOfCinema())
+                        .build();
+                cinemaDTOs.add(cinemaDTO);
+            }
+        }
+        return cinemaDTOs;
     }
 }

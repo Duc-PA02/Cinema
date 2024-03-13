@@ -34,11 +34,12 @@ public class WebSecurityConfig {
                         requests
                                 .requestMatchers(HttpMethod.POST, "/user/register", "/user/confirm-register", "/user/login", "/user/forgot-password", "/user/confirm-new-password")
                                 .permitAll()
-                                .requestMatchers(HttpMethod.GET,"movie/top-movie","movie/cinema-movie").permitAll()
+                                .requestMatchers(HttpMethod.GET,"movie/top-movie","movie/cinema-movie","movie/all","cinema/get-by-schedule-movie","room/get-by-schedule-movie","schedule/get-scheduledto","food/get-fooddto")
+                                .permitAll()
                                 .requestMatchers(HttpMethod.GET, "/admin/get/all-user","/admin/get/userbyid").hasRole("ADMIN")
-                                .requestMatchers(HttpMethod.POST,"/admin/cinema/create","/admin/room/create","admin/food/create","admin/seat/create","admin/movie/create").hasRole("ADMIN")
-                                .requestMatchers(HttpMethod.PUT,"/admin/cinema/update","/admin/room/update","admin/food/update","admin/seat/update","admin/movie/update").hasRole("ADMIN")
-                                .requestMatchers(HttpMethod.DELETE,"/admin/cinema/delete","/admin/room/delete","admin/food/delete","admin/seat/delete","admin/movie/delete").hasRole("ADMIN")
+                                .requestMatchers(HttpMethod.POST,"/admin/cinema/create","/admin/room/create","admin/food/create","admin/seat/create","admin/movie/create","admin/schedule-create").hasRole("ADMIN")
+                                .requestMatchers(HttpMethod.PUT,"/admin/cinema/update","/admin/room/update","admin/food/update","admin/seat/update","admin/movie/update","admin/schedule-update").hasRole("ADMIN")
+                                .requestMatchers(HttpMethod.DELETE,"/admin/cinema/delete","/admin/room/delete","admin/food/delete","admin/seat/delete","admin/movie/delete","admin/schedule-delete").hasRole("ADMIN")
                                 .requestMatchers(HttpMethod.POST, "/user/change-password").hasAnyRole("ADMIN", "USER")
                                 .anyRequest().authenticated()
 

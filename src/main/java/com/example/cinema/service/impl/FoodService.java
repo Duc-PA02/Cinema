@@ -1,6 +1,7 @@
 package com.example.cinema.service.impl;
 
 import com.example.cinema.dto.FoodCreateRequest;
+import com.example.cinema.dto.FoodDTO;
 import com.example.cinema.dto.FoodUpdateRequest;
 import com.example.cinema.entity.BillFood;
 import com.example.cinema.entity.Cinema;
@@ -14,7 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class FoodService implements IFoodService {
@@ -72,5 +73,24 @@ public class FoodService implements IFoodService {
         }
         foodRepository.delete(food.get());
         return "Xoa thanh cong cinema";
+    }
+
+    @Override
+    public List<FoodDTO> getFoodDTOs() throws Exception {
+        List<Food> foods = foodRepository.findAll();
+        if (foods.isEmpty()){
+            throw new DataNotFoundException("Khong tim thay do an");
+        }
+        List<FoodDTO> foodDTOs = new ArrayList<>();
+        for (Food food : foods){
+            FoodDTO foodDTO = FoodDTO.builder()
+                    .nameOfFood(food.getNameOfFood())
+                    .description(food.getDescription())
+                    .image(food.getImage())
+                    .price(food.getPrice())
+                    .build();
+            foodDTOs.add(foodDTO);
+        }
+        return foodDTOs;
     }
 }

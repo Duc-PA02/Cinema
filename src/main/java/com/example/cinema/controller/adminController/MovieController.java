@@ -46,12 +46,4 @@ public class MovieController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
     }
-    @GetMapping("movie/cinema-movie")
-    public ResponseEntity<?> getMovieByCinema(@RequestParam String nameCinema){
-        try {
-            return ResponseEntity.ok().body(movieService.getMoviesByCinema(nameCinema));
-        }catch (Exception e){
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
-        }
-    }
 }

@@ -1,9 +1,12 @@
 package com.example.cinema.service.impl;
 
 import com.example.cinema.dto.CreateRoomRequest;
+import com.example.cinema.dto.RoomDTO;
 import com.example.cinema.dto.UpdateRoomRequest;
 import com.example.cinema.entity.Cinema;
+import com.example.cinema.entity.Movie;
 import com.example.cinema.entity.Room;
+import com.example.cinema.entity.Schedule;
 import com.example.cinema.exceptions.DataNotFoundException;
 import com.example.cinema.repository.CinemaRepository;
 import com.example.cinema.repository.RoomRepository;
@@ -12,8 +15,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -77,5 +79,30 @@ public class RoomService implements IRoomService {
         }
         roomRepository.delete(room.get());
         return "Xoa thanh cong room";
+    }
+
+    @Override
+    public List<RoomDTO> getRooms() throws Exception {
+        List<Room> rooms = roomRepository.findAll();
+        if (rooms.isEmpty()){
+            throw new DataNotFoundException("Khong tim thay room");
+        }
+        List<RoomDTO> roomDTOs = new ArrayList<>();
+        for (Room room : rooms){
+            Set<Movie> movies = new HashSet<>();
+            for (Schedule schedule : room.getRoomschedulelist()){
+                movies.add(schedule.getMovieId());
+            }
+            if (!movies.isEmpty()){
+                RoomDTO roomDTO = RoomDTO.builder()
+                        .capacity(room.getCapacity())
+                        .description(room.getDescription())
+                        .name(room.getName())
+                        .type(room.getType())
+                        .build();
+                roomDTOs.add(roomDTO);
+            }
+        }
+        return roomDTOs;
     }
 }
