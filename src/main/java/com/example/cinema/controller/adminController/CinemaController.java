@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.lang.reflect.Type;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @RestController
 @RequiredArgsConstructor
@@ -37,6 +38,14 @@ public class CinemaController {
     public ResponseEntity<?> deleteCinema(@RequestParam int id){
         try {
             return ResponseEntity.ok().body(cinemaService.deleteCinema(id));
+        }catch (Exception e){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
+    }
+    @GetMapping("admin/cinema-revenue")
+    public ResponseEntity<?> getCinemaRevenueByTime(@RequestParam LocalDateTime startTime, @RequestParam LocalDateTime endTime){
+        try {
+            return ResponseEntity.ok().body(cinemaService.getCinemaRevenueByTimeRange(startTime,endTime));
         }catch (Exception e){
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }

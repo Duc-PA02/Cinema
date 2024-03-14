@@ -1,5 +1,6 @@
 package com.example.cinema.service.iservice;
 
+import com.example.cinema.dto.FoodBestSell7Day;
 import com.example.cinema.dto.FoodCreateRequest;
 import com.example.cinema.dto.FoodDTO;
 import com.example.cinema.dto.FoodUpdateRequest;
@@ -13,4 +14,5 @@ public interface IFoodService {
     Food updateFood(FoodUpdateRequest updateFoodRequest) throws Exception;
     public String deleteFood(int id);
     List<FoodDTO> getFoodDTOs() throws Exception;
+    List<FoodBestSell7Day> getFoodBestSale7day() throws Exception;
 }

@@ -36,4 +36,12 @@ public class FoodController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
     }
+    @GetMapping("admin/food-bestsell7day")
+    public ResponseEntity<?> getFoodBestSelling7Day(){
+        try {
+            return ResponseEntity.ok().body(foodService.getFoodBestSale7day());
+        }catch (Exception e){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
+    }
 }

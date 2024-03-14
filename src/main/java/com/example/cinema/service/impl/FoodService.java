@@ -1,12 +1,11 @@
 package com.example.cinema.service.impl;
 
+import com.example.cinema.dto.FoodBestSell7Day;
 import com.example.cinema.dto.FoodCreateRequest;
 import com.example.cinema.dto.FoodDTO;
 import com.example.cinema.dto.FoodUpdateRequest;
 import com.example.cinema.entity.BillFood;
-import com.example.cinema.entity.Cinema;
 import com.example.cinema.entity.Food;
-import com.example.cinema.entity.Room;
 import com.example.cinema.exceptions.DataNotFoundException;
 import com.example.cinema.repository.BillFoodRepository;
 import com.example.cinema.repository.FoodRepository;
@@ -15,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.*;
 
 @Service
@@ -89,6 +89,27 @@ public class FoodService implements IFoodService {
                     .image(food.getImage())
                     .price(food.getPrice())
                     .build();
+            foodDTOs.add(foodDTO);
+        }
+        return foodDTOs;
+    }
+
+    @Override
+    public List<FoodBestSell7Day> getFoodBestSale7day() throws Exception {
+        List<Object[]> foodData = foodRepository.findBestSellingFoodsInLast7Days();
+        List<FoodBestSell7Day> foodDTOs = new ArrayList<>();
+
+        if (foodData.isEmpty()) {
+            throw new DataNotFoundException("Khong co mon an nao duoc ban trong 7 ngay qua");
+        }
+
+        for (Object[] row : foodData) {
+            FoodBestSell7Day foodDTO = new FoodBestSell7Day();
+            foodDTO.setNameOfFood((String) row[0]);
+            foodDTO.setImage((String) row[1]);
+            foodDTO.setDescription((String) row[2]);
+            foodDTO.setPrice((Double) row[3]);
+            foodDTO.setTotalQuantity(((BigDecimal) row[4]).longValue());
             foodDTOs.add(foodDTO);
         }
         return foodDTOs;

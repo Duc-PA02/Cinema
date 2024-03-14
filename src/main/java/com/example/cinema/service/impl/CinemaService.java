@@ -1,6 +1,7 @@
 package com.example.cinema.service.impl;
 
 import com.example.cinema.dto.CinemaDTO;
+import com.example.cinema.dto.CinemaRevenueDTO;
 import com.example.cinema.dto.UpdateCinemaDTO;
 import com.example.cinema.entity.Cinema;
 import com.example.cinema.entity.Movie;
@@ -14,6 +15,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.*;
 
 @Service
@@ -144,5 +147,23 @@ public class CinemaService implements ICinemaService {
             }
         }
         return cinemaDTOs;
+    }
+
+    @Override
+    public List<CinemaRevenueDTO> getCinemaRevenueByTimeRange(LocalDateTime startTime, LocalDateTime endTime) {
+        List<Object[]> revenueData = cinemaRepository.findCinemaRevenueByTimeRange(startTime, endTime);
+        List<CinemaRevenueDTO> revenueDTOs = new ArrayList<>();
+
+        for (Object[] row : revenueData) {
+            int cinemaId = (int) row[0];
+            String cinemaName = (String) row[1];
+            Double doubleValue = (Double) row[2];
+            BigDecimal totalRevenue = BigDecimal.valueOf(doubleValue);
+
+            CinemaRevenueDTO revenueDTO = new CinemaRevenueDTO(cinemaId, cinemaName, totalRevenue);
+            revenueDTOs.add(revenueDTO);
+        }
+
+        return revenueDTOs;
     }
 }

@@ -8,9 +8,10 @@ import lombok.*;
 @NoArgsConstructor
 @Getter
 @Setter
-public class FoodDTO {
+public class FoodBestSell7Day {
     private double price;
     private String description;
     private String image;
     private String nameOfFood;
+    private Long totalQuantity;
 }
