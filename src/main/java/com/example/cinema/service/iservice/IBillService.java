@@ -5,4 +5,5 @@ import com.example.cinema.entity.Bill;
 
 public interface IBillService {
     Bill createBill(BillDTO billDTO) throws Exception;
+
 }

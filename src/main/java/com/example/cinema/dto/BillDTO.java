@@ -2,6 +2,8 @@ package com.example.cinema.dto;
 
 import lombok.*;
 
+import java.time.LocalDateTime;
+
 
 @Data
 @Builder
@@ -11,10 +13,11 @@ import lombok.*;
 @Setter
 public class BillDTO {
     private double totalMoney;
-    private String creatTime;
-    private String nameBill;
-    private String nameOfFood;
-    private int quantityFood;
-    private String nameRoom;
-    private String nameMovie;
+    private String tradingCode;
+    private LocalDateTime creatTime;
+    private LocalDateTime updateTime;
+    private String name;
+    private int customerId;
+    private int promotionId;
+    private int billStatusId;
 }
