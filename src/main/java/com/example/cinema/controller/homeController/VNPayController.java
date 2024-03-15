@@ -4,8 +4,7 @@ import com.example.cinema.service.impl.VNPayService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.UnsupportedEncodingException;
 
@@ -20,5 +19,9 @@ public class VNPayController {
         } catch (Exception e){
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
+    }
+    @PostMapping("payment")
+    public String payment(@RequestParam String email,@RequestParam String bank, @RequestParam String name, @RequestParam String stk, @RequestParam Long totalMoney) {
+            return vnPayService.postPayment(email, bank, name, stk, totalMoney);
     }
 }

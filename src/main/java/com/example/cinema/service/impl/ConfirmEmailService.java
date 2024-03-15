@@ -27,7 +27,7 @@ public class ConfirmEmailService implements IConfirmEmailService {
         return String.valueOf(randomNumber);
     }
 
-    private void sendEmail(String to, String subject,String content){
+    public void sendEmail(String to, String subject,String content){
         SimpleMailMessage msg =new SimpleMailMessage();
         msg.setFrom("ducpa2002@gmail.com");
         msg.setTo(to);

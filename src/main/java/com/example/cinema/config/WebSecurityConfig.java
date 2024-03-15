@@ -32,7 +32,7 @@ public class WebSecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(requests ->
                         requests
-                                .requestMatchers(HttpMethod.POST, "/user/register", "/user/confirm-register", "/user/login", "/user/forgot-password", "/user/confirm-new-password")
+                                .requestMatchers(HttpMethod.POST, "/user/register", "/user/confirm-register", "/user/login", "/user/forgot-password", "/user/confirm-new-password","payment")
                                 .permitAll()
                                 .requestMatchers(HttpMethod.GET,"movie/top-movie","movie/cinema-movie","movie/all","cinema/get-by-schedule-movie","room/get-by-schedule-movie","schedule/get-scheduledto","food/get-fooddto","bill/bill-create","vnpay-payment")
                                 .permitAll()
