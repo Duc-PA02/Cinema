@@ -18,6 +18,12 @@ public interface ScheduleRepository extends JpaRepository<Schedule, Integer> {
             "WHERE s.roomid = ?1 " +
             "AND ((s.startAt BETWEEN ?2 AND ?3) OR (s.endAt BETWEEN ?2 AND ?3))")
     int countRoomScheduleConflict(int roomId, LocalDateTime startAt, LocalDateTime endAt);
-
+    @Query(nativeQuery = true,value = "SELECT s.* FROM schedule s " +
+            "JOIN room r ON s.roomid = r.id " +
+            "JOIN cinema c ON r.cinemaid = c.id " +
+            "WHERE s.movieid = ?1 " +
+            "AND c.id = ?2 " +
+            "AND r.id = ?3 ")
+    List<Schedule> findByMovieIdAndRoomCinemaIdAndRoomId(int movie,int cinemaId,int roomId);
 
 }

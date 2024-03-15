@@ -8,7 +8,7 @@ import com.example.cinema.entity.Schedule;
 import java.util.List;
 
 public interface IScheduleService {
-    List<ScheduleDTO> getScheduleDTOs() throws Exception;
+    List<ScheduleDTO> getScheduleDTOsByMovieAndCinemaAndRoom(int movieId, int cinemaId, int roomId) throws Exception;
     Schedule createSchedule(ScheduleCreateRequest scheduleCreateRequest) throws Exception;
     Schedule updateSchedule(ScheduleUpdateRequest scheduleUpdateRequest) throws Exception;
     public String deleteSchedule(int id);
