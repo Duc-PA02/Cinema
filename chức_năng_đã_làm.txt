@@ -1,0 +1,21 @@
+Tuần 1															
+2. Xây dựng db theo code first											
+3. Chức năng đăng ký, xác thực đăng ký tài khoản (gửi mã xác nhận về email)								
+4. Đăng nhập, xác thực người dùng (Authentication, Authorization)									
+5. Quên mật khẩu, tạo mật khẩu mới, đổi mật khẩu											
+6. Lấy tất cả thông tin người dùng, lấy thông tin người dùng theo id											
+											
+Tuần 2											
+1. Hiển thị các bộ phim nổi bật(sắp xếp theo số lượng đặt vé)										
+2. Hiển thị phim theo rạp, phòng, trạng thái ghế trong phòng										
+3. CRUD Cinema, Room, Food, Seat, Movie (Admin)										
+											
+Tuần 3											
+1. Xử lý luồng: Chọn phim => Chọn rạp => Chọn phòng => Chọn suất chiếu, đồ ăn => Tạo hóa đơn => thanh toán VNPay dựa vào Promotion để tính giá tiền sau cùng. Sau khi thanh toán thì thông báo được gửi về email của người dùng						
+2. CRUD Schedule - trong một phòng không chiếu đồng thời 2 phim trong một khoảng thời gian giao nhau											
+											
+Tuần 4											
+1. Hoàn tất những công việc CRUD các bảng											
+2. Thống kê doanh số của từng rạp theo khoảng thời gian(Admin)										
+3. Thống kê đồ ăn bán chạy trong 7 ngày gần nhất(Admin)											
+4. Quản lý thông tin của người dùng(Admin)																						

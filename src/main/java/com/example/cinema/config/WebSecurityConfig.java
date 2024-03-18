@@ -32,9 +32,9 @@ public class WebSecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(requests ->
                         requests
-                                .requestMatchers(HttpMethod.POST, "/user/register", "/user/confirm-register", "/user/login", "/user/forgot-password", "/user/confirm-new-password","payment")
+                                .requestMatchers(HttpMethod.POST, "/user/register", "/user/confirm-register", "/user/login", "/user/forgot-password", "/user/confirm-new-password","payment","/submitOrder")
                                 .permitAll()
-                                .requestMatchers(HttpMethod.GET,"movie/top-movie","movie/cinema-movie","movie/all","cinema/get-by-schedule-movie","room/get-by-schedule-movie","schedule/get-scheduledto","food/get-fooddto","bill/bill-create","vnpay-payment")
+                                .requestMatchers(HttpMethod.GET,"movie/top-movie","movie/cinema-movie","movie/all","cinema/get-by-schedule-movie","room/get-by-schedule-movie","schedule/get-scheduledto","food/get-fooddto","bill/bill-create","vnpay-payment","/vnpay-payment")
                                 .permitAll()
                                 .requestMatchers(HttpMethod.GET, "/admin/get/all-user","/admin/get/userbyid","admin/food-bestsell7day","admin/cinema-revenue").hasRole("ADMIN")
                                 .requestMatchers(HttpMethod.POST,"/admin/cinema/create","/admin/room/create","admin/food/create","admin/seat/create","admin/movie/create","admin/schedule-create").hasRole("ADMIN")
